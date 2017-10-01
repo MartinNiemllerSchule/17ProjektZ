@@ -22,7 +22,7 @@ public class Zimmerbelegung {
         try {
             reader = new FileReader("data/zimmerbelegung1.txt");
             BufferedReader br = new BufferedReader(reader);
-            String [] daten = new String[3];
+            String[] daten = new String[3];
             do {
                 for (int i = 0; i < 3; i++) {
                     daten[i] = br.readLine();
@@ -34,8 +34,11 @@ public class Zimmerbelegung {
             System.err.println( "Fehler beim Lesen der Datei." );
         }
         
+        // Freunde und nicht Freunde zuweisen
+        for (int i = 0; i < schuelerinnen.size(); i++) {
+            schuelerinnen.get(i).setFreundeUndNichtFreunde(schuelerinnen);
+        }
         
         // TODO code application logic here
     }
-    
 }

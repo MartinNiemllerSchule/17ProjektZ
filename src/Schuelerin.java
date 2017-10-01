@@ -8,26 +8,44 @@ import java.util.ArrayList;
  */
 public class Schuelerin {
     private String name;
-    private ArrayList<String> freunde = new ArrayList<>();
-    private ArrayList<String> nichtFreunde = new ArrayList<>();
-    
-    public Schuelerin(String name, ArrayList<String> freunde, 
-            ArrayList<String> nichtFreunde) {
-        
-        this.name = name;
-        this.freunde = freunde;
-        this.nichtFreunde = nichtFreunde;
-    }
+    private ArrayList<Schuelerin> freunde = new ArrayList<>();
+    private ArrayList<Schuelerin> nichtFreunde = new ArrayList<>();
+    private String[] daten = new String[2];                                                                                                                                                  
     
     public Schuelerin(String[] daten) {
         name = daten[0];
-        String[] freunde = daten[1].split(" ");
-        for (int i = 1; i < freunde.length; i++) {
-            this.freunde.add(freunde[i]);
+        this.daten[0] = daten[1];
+        this.daten[1] = daten[2];
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setFreundeUndNichtFreunde(ArrayList<Schuelerin> schuelerinnen) {
+        String[] freunde = daten[0].split(" ");
+        for (int i = 0; i < freunde.length; i++) {
+            for (int j = 0; j < schuelerinnen.size(); j++) {
+                if (freunde[i].equals(schuelerinnen.get(j).getName())) {
+                    this.freunde.add(schuelerinnen.get(j));
+                }
+            }
         }
-        String[] nichtFreunde = daten[2].split(" ");
-        for (int i = 1; i < nichtFreunde.length; i++) {
-            this.nichtFreunde.add(nichtFreunde[i]);
+        String[] nichtFreunde = daten[1].split(" ");
+        for (int i = 0; i < nichtFreunde.length; i++) {
+            for (int j = 0; j < schuelerinnen.size(); j++) {
+                if (nichtFreunde[i].equals(schuelerinnen.get(j).getName())) {
+                    this.nichtFreunde.add(schuelerinnen.get(j));
+                }
+            }
         }
+    }
+
+    public ArrayList<Schuelerin> getFreunde() {
+        return freunde;
+    }
+
+    public ArrayList<Schuelerin> getNichtFreunde() {
+        return nichtFreunde;
     }
 }
