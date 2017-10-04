@@ -8,10 +8,9 @@ import java.util.ArrayList;
  */
 public class Zimmer {
     private ArrayList<Schuelerin> schuelerinnen = new ArrayList<>();
-    private boolean alleGluecklich = true;
     
-    public Zimmer(Schuelerin schuelerin) {
-        fuegeHinzu(schuelerin);
+    public Zimmer() {
+        
     }
     
     public boolean fuegeHinzu(Schuelerin schuelerin) {
@@ -24,7 +23,6 @@ public class Zimmer {
                 System.out.println(schuelerin.getName() + " möchte nicht in "
                         + "ein Zimmer mit " 
                         + schuelerin.getNichtFreunde().get(i).getName() + ".");
-                alleGluecklich = false;
                 return false;
             }
         }
@@ -39,7 +37,6 @@ public class Zimmer {
                     System.out.println(schuelerin.getName() + " möchte nicht in "
                             + "ein Zimmer mit " + schuelerinnen.get(i).getName()
                             + ".");
-                    alleGluecklich = false;
                     return false;
                 }
             }            
@@ -51,26 +48,23 @@ public class Zimmer {
         
         /* 
          * Alle Freunde der Schülerin und deren Freunde werden dem Zimmer 
-         * hinzugefügt, wenn niemand etwas dagegen hat.
+         * hinzugefügt, wenn sie nicht bereits in einen anderem Zimmer sind und 
+         * niemand etwas dagegen hat.
          */
         for (int i = 0; i < schuelerin.getFreunde().size(); i++) {
-            if(!fuegeHinzu(schuelerin.getFreunde().get(i))) {
-                alleGluecklich = false;
+            Schuelerin freundin = schuelerin.getFreunde().get(i);
+            if (freundin.getZimmer() != null && freundin .getZimmer() != this) {
+                System.out.println(freundin.getName() + " ist schon in einem "
+                        + "anderem Zimmer.");
                 return false;
             }
+                
+            if(!fuegeHinzu(schuelerin.getFreunde().get(i))) return false;
         }
         return true;
     }
     
     public ArrayList<Schuelerin> getSchuelerinnen() {
         return schuelerinnen;
-    }
-    
-    public int getGroesse() {
-        return schuelerinnen.size();
-    }
-    
-    public boolean getAlleGluecklich() {
-        return alleGluecklich;
     }
 }
