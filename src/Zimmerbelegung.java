@@ -10,17 +10,19 @@ import java.util.ArrayList;
  * @author Janik
  */
 public class Zimmerbelegung {
-
+    public static ArrayList<Schuelerin> schuelerinnen = new ArrayList<>();
+    public static ArrayList<Zimmer> zimmer = new ArrayList<>();
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ArrayList<Schuelerin> schuelerinnen = new ArrayList<>();
+        boolean zimmerbelegung;
         
         // Einlesen der Schülerinnen aus der Datei
         FileReader reader = null;
         try {
-            reader = new FileReader("data/zimmerbelegung1.txt");
+            reader = new FileReader("data/test.txt");
             BufferedReader br = new BufferedReader(reader);
             String[] daten = new String[3];
             do {
@@ -34,11 +36,26 @@ public class Zimmerbelegung {
             System.err.println( "Fehler beim Lesen der Datei." );
         }
         
-        // Freunde und nicht Freunde zuweisen
+        // Freunde und Nicht-Freunde zuweisen
         for (int i = 0; i < schuelerinnen.size(); i++) {
             schuelerinnen.get(i).setFreundeUndNichtFreunde(schuelerinnen);
         }
         
-        // TODO code application logic here
-    }
+        // Die erste Schülerin wird einem Zimmer hinzugefügt.
+        zimmer.add(new Zimmer());
+        zimmerbelegung = zimmer.get(0).fuegeHinzu(schuelerinnen.get(0));
+        
+        // zweites Zimmer
+        zimmer.add(new Zimmer());
+        zimmerbelegung = zimmer.get(1).fuegeHinzu(schuelerinnen.get(2));
+        
+        // drittes Zimmer 
+        zimmer.add(new Zimmer());
+        zimmerbelegung = zimmer.get(2).fuegeHinzu(schuelerinnen.get(7));
+        
+        System.out.println(zimmer.get(0).zusammenlegen(zimmer.get(1)));
+        System.out.println(zimmer.get(0).zusammenlegen(zimmer.get(2)));
+        System.out.println(zimmer.get(1).zusammenlegen(zimmer.get(2)));
+        
+    } 
 }
