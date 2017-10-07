@@ -9,51 +9,55 @@ import java.util.ArrayList;
 public class Zimmer {
     private ArrayList<Schuelerin> schuelerinnen = new ArrayList<>();
     
-    public Zimmer() {
+    public boolean fuegeHinzu(Schuelerin s) {
         
-    }
-    
-    public boolean fuegeHinzu(Schuelerin schuelerin) {
+        // Die Schülerin ist bereits in diesem Zimmer.
+        if (s.getZimmer() == this) return true;
+        
         /*
-         * Wenn eine Nicht-Freundin der Schülerin bereits im Zimer ist, wird 
-         * false zurückgegeben 
+         * Wenn eine Nicht-Freundin der Schülerin bereits im Zimemr ist, wird 
+         * false zurückgegeben.
          */
-        for (int i = 0; i < schuelerin.getNichtFreunde().size(); i++) {
-            if (schuelerin.getNichtFreunde().get(i).getZimmer() == this) {
-                System.out.println(schuelerin.getName() + " möchte nicht in "
-                        + "ein Zimmer mit " 
-                        + schuelerin.getNichtFreunde().get(i).getName() + ".");
+        for (int i = 0; i < s.getNichtFreunde().size(); i++) {
+            if (s.getNichtFreunde().get(i).getZimmer() == this) {
+                System.out.println(s.getName() + " möchte nicht in ein Zimmer mit " 
+                        + s.getNichtFreunde().get(i).getName() + ".");
                 return false;
             }
         }
         
         /*
          * Wenn eine Schülerin aus dem Zimmer nicht mit der Schülerin die 
-         * hinzugefügt werden soll in ein Zimmer möchte, wird false zurückgegeben 
+         * hinzugefügt werden soll in ein Zimmer möchte, wird false zurückgegeben.
          */
         for (int i = 0; i < schuelerinnen.size(); i++) {
             for (int j = 0; j < schuelerinnen.get(i).getNichtFreunde().size(); j++) {
-                if (schuelerinnen.get(i).getNichtFreunde().get(j) == schuelerin) {
-                    System.out.println(schuelerin.getName() + " möchte nicht in "
-                            + "ein Zimmer mit " + schuelerinnen.get(i).getName()
-                            + ".");
+                if (schuelerinnen.get(i).getNichtFreunde().get(j) == s) {
+                    System.out.println(s.getName() + " möchte nicht in ein Zimmer "
+                            + "mit " + schuelerinnen.get(i).getName() + ".");
                     return false;
                 }
             }            
         }
         
         // Die Schülerin wird dem Zimmer hinzugefügt.
-        schuelerinnen.add(schuelerin);
-        schuelerin.setZimmer(this);
+        schuelerinnen.add(s);
+        s.setZimmer(this);
         
         /* 
          * Alle Freunde der Schülerin und deren Freunde werden dem Zimmer 
-         * hinzugefügt, wenn sie nicht bereits in einen anderem Zimmer sind und 
-         * niemand etwas dagegen hat.
+         * hinzugefügt. 
+         * Wenn die Freundin bereits in einem anderen Zimmer ist, werden die 
+         * beiden Zimmer zusammengelegt.
          */
-        for (int i = 0; i < schuelerin.getFreunde().size(); i++) {
-            if (schuelerin.getFreunde().get(i).getZimmer() != null) continue; 
-            if(!fuegeHinzu(schuelerin.getFreunde().get(i))) return false;
+        for (int i = 0; i < s.getFreunde().size(); i++) {
+            Schuelerin freundin = s.getFreunde().get(i);
+            if (freundin.getZimmer() != this) {
+                if (freundin.getZimmer() != null) {
+                    if (!zusammenlegen(freundin.getZimmer())) return false;
+                } 
+                if(!fuegeHinzu(freundin)) return false;
+            } 
         }
         return true;
     }
@@ -61,19 +65,19 @@ public class Zimmer {
     public ArrayList<Schuelerin> getSchuelerinnen() {
         return schuelerinnen;
     }
-    
-    public boolean zusammenlegen(Zimmer zimmer) {
+
+    public boolean zusammenlegen(Zimmer z) {
         
         /*
          * Alle Nicht-Freunde jeder Schülerin aus Zimmer 1 werden mit den
          * Schülerinnen aus Zimmer 2 verglichen.
          */
         for (int i = 0; i < schuelerinnen.size(); i++) {
-            Schuelerin schuelerin = schuelerinnen.get(i);
-            for (int j = 0; j < schuelerin.getNichtFreunde().size(); j++) {
-                for (int k = 0; k < zimmer.getSchuelerinnen().size(); k++) {
-                    if (schuelerin.getNichtFreunde().get(j)
-                            == zimmer.getSchuelerinnen().get(k)) return false;
+            Schuelerin s = schuelerinnen.get(i);
+            for (int j = 0; j < s.getNichtFreunde().size(); j++) {
+                for (int k = 0; k < z.getSchuelerinnen().size(); k++) {
+                    if (s.getNichtFreunde().get(j) == z.getSchuelerinnen().get(k))
+                        return false;
                 }
             }
         }
@@ -82,24 +86,22 @@ public class Zimmer {
          * Alle Nicht-Freunde jeder Schülerin aus Zimmer 2 werden mit den
          * Schülerinnen aus Zimmer 1 verglichen.
          */
-        for (int i = 0; i < zimmer.getSchuelerinnen().size(); i++) {
-            Schuelerin schuelerin = zimmer.getSchuelerinnen().get(i);
+        for (int i = 0; i < z.getSchuelerinnen().size(); i++) {
+            Schuelerin schuelerin = z.getSchuelerinnen().get(i);
             for (int j = 0; j < schuelerin.getNichtFreunde().size(); j++) {
                 for (int k = 0; k < schuelerinnen.size(); k++) {
-                    if (schuelerin.getNichtFreunde().get(j) 
-                            == schuelerinnen.get(k)) return false;
+                    if (schuelerin.getNichtFreunde().get(j) == schuelerinnen.get(k))
+                        return false;
                 }
             }
         }
         
-        for (int i = 0; i < zimmer.getSchuelerinnen().size();) {
-            schuelerinnen.add(zimmer.getSchuelerinnen().get(i));
-            zimmer.getSchuelerinnen().get(i).setZimmer(this);
-            zimmer.getSchuelerinnen().remove(i);
+        // Alle Schülerinnen aus Zimmer 2 werden Zimmer 1 hinzugefügt.
+        for (int i = 0; i < z.getSchuelerinnen().size();) {
+            schuelerinnen.add(z.getSchuelerinnen().get(i));
+            z.getSchuelerinnen().get(i).setZimmer(this);
+            z.getSchuelerinnen().remove(i);
         }
-        
-        
         return true;
     }
-    
 }

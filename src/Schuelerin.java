@@ -10,6 +10,7 @@ public class Schuelerin {
     private String name;
     private ArrayList<Schuelerin> freunde = new ArrayList<>();
     private ArrayList<Schuelerin> nichtFreunde = new ArrayList<>();
+    private Zimmer zimmer;
     private String[] daten = new String[2];                                                                                                                                                  
     
     public Schuelerin(String[] daten) {
@@ -48,4 +49,12 @@ public class Schuelerin {
     public ArrayList<Schuelerin> getNichtFreunde() {
         return nichtFreunde;
     }
+    
+    public void setZimmer(Zimmer zimmer) {
+        this.zimmer = zimmer;
+    }
+    
+    public Zimmer getZimmer() {
+        return zimmer;
+    }  
 }
