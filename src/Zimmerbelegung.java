@@ -19,8 +19,8 @@ public class Zimmerbelegung {
      */
     public static void main(String[] args) {
         
-        // Einlesen der Schülerinnen aus der Datei
-        dateiLesen();
+        // Einlesen der Schülerinnen aus einer Datei
+        dateiLesen("data/zimmerbelegung1.txt");
         
         // Freunde und Nicht-Freunde zuweisen
         for (int i = 0; i < schuelerinnen.size(); i++) {
@@ -30,17 +30,21 @@ public class Zimmerbelegung {
         // Schülerinnen auf die Zimmer verteilen
         zimmerbelegung = verteileSchuelerinnenAufZimmer();
         
-        //Zimmer zusammenlegen
-        zimmerZusammenlegen();
+        // Leere Zimmer die beim Zusammenlegen entstehen löschen
+        for (int i = 0; i < zimmer.size(); i++) {
+            if (zimmer.get(i).getSchuelerinnen().isEmpty()) {
+                zimmer.remove(i); i--;
+            }
+        }
         
-        // Zimmerbelegung ausgeben
+        // Die Zimmerbelegung wird auf der Konsole ausgegeben.
         zimmerbelegungAusgeben();
     }
     
-    public static void dateiLesen() {
+    public static void dateiLesen(String pfad) {
         FileReader reader = null;
         try {
-            reader = new FileReader("data/zimmerbelegung2.txt");
+            reader = new FileReader(pfad);
             BufferedReader br = new BufferedReader(reader);
             String[] daten = new String[3];
             do {
@@ -82,17 +86,9 @@ public class Zimmerbelegung {
                 }
             }
         }
-        
-        // Leere Zimmer löschen
-        for (int i = 0; i < zimmer.size(); i++) {
-            if (zimmer.get(i).getSchuelerinnen().isEmpty()) {
-                zimmer.remove(i);
-                i--;
-            }
-        }
         return true;
     }
-    
+ 
     public static void zimmerbelegungAusgeben() {
         if (zimmerbelegung) {
             for (int i = 0; i < zimmer.size(); i++) {
@@ -107,7 +103,4 @@ public class Zimmerbelegung {
         } else System.out.println("Keine Zimmerbelegung möglich.");
     }
     
-    public static void zimmerZusammenlegen() {
-
-    }
 }
